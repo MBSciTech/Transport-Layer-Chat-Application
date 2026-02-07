@@ -1,17 +1,20 @@
-# protocol.py
+def is_private_message(msg):
+    return msg.startswith("pvtmsg/")
 
-def format_broadcast(username, message):
-    return f"{username}: {message}"
+def parse_private_message(msg):
+    """
+    Format:
+    pvtmsg/username message with spaces allowed
+    """
+    try:
+        header, message = msg.split(" ", 1)  # ONLY ONE split
+        _, receiver = header.split("/", 1)
+        return receiver, message
+    except ValueError:
+        return None, None
 
-def format_private(sender, message):
-    return f"[PRIVATE] {sender}: {message}"
+def format_private(sender, msg):
+    return f"[PRIVATE] {sender}: {msg}"
 
-def is_private_message(message):
-    return message.startswith("pvtmsg/")
-
-def parse_private_message(message):
-    # pvtmsg/UserB hi
-    parts = message.split("/", 2)
-    receiver = parts[1]
-    msg = parts[2]
-    return receiver, msg
+def format_broadcast(sender, msg):
+    return f"{sender}: {msg}"
