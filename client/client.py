@@ -1,9 +1,18 @@
 import socket
 import threading
-from config import HOST, PORT, BUFFER_SIZE
+from config import HOST as DEFAULT_HOST, PORT, BUFFER_SIZE
+
+host_input = input(f"Enter Server IP address [Default: {DEFAULT_HOST}]: ").strip()
+HOST = host_input if host_input else DEFAULT_HOST
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((HOST, PORT))
+try:
+    print(f"Connecting to {HOST}:{PORT}...")
+    client_socket.connect((HOST, PORT))
+    print("Connected to server successfully!")
+except Exception as e:
+    print(f"Error: Unable to connect to server at {HOST}:{PORT} ({e})")
+    exit(1)
 
 def receive_messages():
     while True:
